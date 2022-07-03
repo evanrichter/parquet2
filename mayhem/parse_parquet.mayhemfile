@@ -1,0 +1,7 @@
+project: parquet2
+target: parse-parquet
+
+cmds:
+  - cmd: /parse_parquet
+  - cmd: /parse_parquet_no_inst @@
+    libfuzzer: false
