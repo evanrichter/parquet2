@@ -15,8 +15,8 @@ fn fuzz(data: &[u8]) -> Result<(), ()> {
     for row_group in metadata.row_groups {
         let columns = row_group.columns();
         for column_meta in columns {
-            for page in
-                get_page_iterator(column_meta, &mut reader, None, Vec::new()).map_err(unit)?
+            for page in get_page_iterator(column_meta, &mut reader, None, Vec::new(), 16 * 1024)
+                .map_err(unit)?
             {
                 let mut decompress_buffer = Vec::new();
                 if let Ok(page) = page {
