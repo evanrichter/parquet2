@@ -200,12 +200,17 @@ pub(super) fn build_page<R: Read>(
     let read_size: usize = page_header.compressed_page_size.try_into()?;
 
     buffer.clear();
-    buffer.try_reserve(read_size)?;
-    reader
+    let bytes_read = reader
         .reader
         .by_ref()
         .take(read_size as u64)
         .read_to_end(buffer)?;
+
+    if bytes_read != read_size {
+        return Err(Error::oos(
+            "The page header reported the wrong page size".to_string(),
+        ));
+    }
 
     finish_page(
         page_header,
